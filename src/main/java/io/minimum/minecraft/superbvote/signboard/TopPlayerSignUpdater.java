@@ -29,7 +29,7 @@ public class TopPlayerSignUpdater implements Runnable {
         Block at = origin.getRelative(BlockFace.UP);
         for (BlockFace face : FACES) {
             Block b = at.getRelative(face);
-            if (b.getType() == Material.PLAYER_HEAD || b.getType() == Material.PLAYER_WALL_HEAD)
+            if (b.getType() == Material.SKULL || b.getType() == Material.SKULL_ITEM)
                 return Optional.of(b);
         }
         return Optional.empty();
@@ -70,8 +70,8 @@ public class TopPlayerSignUpdater implements Runnable {
                 if (headBlock.isPresent()) {
                     Block head = headBlock.get();
                     Skull skull = (Skull) head.getState();
-                    skull.setOwningPlayer(Bukkit.getOfflinePlayer(sign.getPosition() > top.size() ? QUESTION_MARK_HEAD :
-                            top.get(sign.getPosition() - 1).getUuid()));
+                    skull.setOwner(Bukkit.getOfflinePlayer(sign.getPosition() > top.size() ? QUESTION_MARK_HEAD :
+                            top.get(sign.getPosition() - 1).getUuid()).getName());
                     skull.update();
                 }
             }

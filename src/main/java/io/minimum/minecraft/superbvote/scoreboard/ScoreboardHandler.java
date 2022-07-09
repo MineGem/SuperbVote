@@ -1,5 +1,6 @@
 package io.minimum.minecraft.superbvote.scoreboard;
 
+import com.google.common.collect.Lists;
 import io.minimum.minecraft.superbvote.SuperbVote;
 import io.minimum.minecraft.superbvote.util.PlayerVotes;
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ScoreboardHandler {
@@ -35,9 +37,12 @@ public class ScoreboardHandler {
         }
         List<PlayerVotes> leaderboardAsUuids = SuperbVote.getPlugin().getVoteStorage().getTopVoters(
                 Math.min(16, SuperbVote.getPlugin().getConfig().getInt("leaderboard.scoreboard.max", 10)), 0);
-        List<String> leaderboardAsNames = leaderboardAsUuids.stream()
-                .map(ue -> Bukkit.getOfflinePlayer(ue.getUuid()).getName())
-                .collect(Collectors.toList());
+        List<String> leaderboardAsNames = Lists.newArrayList();//leaderboardAsUuids.stream()
+                //.map(ue -> Bukkit.getOfflinePlayer(ue.getUuid()).getName())
+               // .collect(Collectors.toList());
+        for (PlayerVotes id : leaderboardAsUuids) {
+            leaderboardAsNames.add(Bukkit.getOfflinePlayer(id.getUuid()).getName());
+        }
         if (leaderboardAsNames.isEmpty()) {
             scoreboard.getEntries().stream().filter(s -> !s.equals("None found")).forEach(scoreboard::resetScores);
             objective.getScore("None found").setScore(1);

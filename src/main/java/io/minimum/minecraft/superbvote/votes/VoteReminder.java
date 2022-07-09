@@ -8,6 +8,7 @@ import io.minimum.minecraft.superbvote.util.PlayerVotes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,7 +17,13 @@ import java.util.stream.Collectors;
 public class VoteReminder implements Runnable {
     @Override
     public void run() {
-        List<UUID> onlinePlayers = Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission("superbvote.notify")).map(Player::getUniqueId).collect(Collectors.toList());
+        List<UUID> onlinePlayers = new ArrayList<>();
+        for (Player plr : Bukkit.getOnlinePlayers()) {
+            if (plr.hasPermission("superbvote.notify")) {
+                onlinePlayers.add(plr.getUniqueId());
+            }
+        }
+        //List<UUID> onlinePlayers = Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission("superbvote.notify")).map(Player::getUniqueId).collect(Collectors.toList());
 
         VoteStorage voteStorage = SuperbVote.getPlugin().getVoteStorage();
         if (SuperbVote.getPlugin().getConfiguration().getStreaksConfiguration().isPlaceholdersEnabled() && voteStorage instanceof ExtendedVoteStorage) {
